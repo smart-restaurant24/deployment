@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  frontend-menu:
+    build:
+      context: /applications/restaurant-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - /applications/restaurant-frontend/.env
+    networks:
+      - menu-network
+
+  backend-menu:
+    build:
+      context: /applications/Backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - /applications/Backend/.env
+    networks:
+      - menu-network
+
+networks:
+  menu-network:
+    driver: bridge

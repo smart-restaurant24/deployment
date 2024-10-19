@@ -17,6 +17,22 @@ git_pull() {
     cd - > /dev/null
 }
 
+# Function to build a single service
+build_service() {
+    local service=$1
+    echo "Building $service..."
+    docker-compose build $service
+    check_status "Building $service"
+}
+
+# Function to start a single service
+start_service() {
+    local service=$1
+    echo "Starting $service..."
+    docker-compose up -d --no-deps $service
+    check_status "Starting $service"
+}
+
 # Set the paths to your repositories
 APP1_PATH="/applications/Backend"
 APP2_PATH="/applications/restaurant-frontend"
@@ -52,9 +68,21 @@ else
     echo "No images to remove."
 fi
 
-# Build and run Docker containers using docker-compose
-echo "Building and running Docker containers..."
-docker-compose up -d --build
-check_status "Building and running Docker containers"
+# Get all services from docker-compose.yml
+services=$(docker-compose config --services)
+
+# Build all services one by one
+echo "Building all services..."
+for service in $services
+do
+    build_service $service
+done
+
+# Start all services one by one
+echo "Starting all services..."
+for service in $services
+do
+    start_service $service
+done
 
 echo "Script completed successfully!"

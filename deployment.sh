@@ -24,22 +24,33 @@ APP2_PATH="/applications/restaurant-frontend"
 # Pull the latest changes from git for all repositories
 git_pull "$APP1_PATH"
 git_pull "$APP2_PATH"
-git_pull
 
 # Stop all running Docker containers
 echo "Stopping all Docker containers..."
-docker stop $(docker ps -aq)
-check_status "Stopping Docker containers"
+if [ -n "$(docker ps -q)" ]; then
+    docker stop $(docker ps -q)
+    check_status "Stopping Docker containers"
+else
+    echo "No running containers to stop."
+fi
 
 # Remove all Docker containers
 echo "Removing all Docker containers..."
-docker rm $(docker ps -aq)
-check_status "Removing Docker containers"
+if [ -n "$(docker ps -aq)" ]; then
+    docker rm $(docker ps -aq)
+    check_status "Removing Docker containers"
+else
+    echo "No containers to remove."
+fi
 
 # Remove all Docker images
 echo "Removing all Docker images..."
-docker rmi $(docker images -q)
-check_status "Removing Docker images"
+if [ -n "$(docker images -q)" ]; then
+    docker rmi $(docker images -q)
+    check_status "Removing Docker images"
+else
+    echo "No images to remove."
+fi
 
 # Build and run Docker containers using docker-compose
 echo "Building and running Docker containers..."

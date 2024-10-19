@@ -9,8 +9,7 @@ services:
       - "3000:3000"
     env_file:
       - /applications/restaurant-frontend/.env
-    networks:
-      - menu-network
+
 
   backend-menu:
     build:
@@ -20,9 +19,4 @@ services:
       - "8000:8000"
     env_file:
       - /applications/Backend/.env
-    networks:
-      - menu-network
 
-networks:
-  menu-network:
-    driver: bridge

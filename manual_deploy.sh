@@ -50,10 +50,10 @@ else
     echo "No images to remove."
 fi
 
-cd APP1_PATH || exit
+cd "$APP1_PATH" || exit
 docker build -t backend-menu . --progress=plain
 
-cd APP2_PATH || exit
+cd "$APP2_PATH" || exit
 docker build -t frontend-menu .
 
 docker run -d --name hardcore_jemison -p 3000:3000 frontend-menu
